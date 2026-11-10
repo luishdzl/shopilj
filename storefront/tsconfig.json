@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "paths": {
+      "@shopify/storefront-api-client": ["@shopify/storefront-api-client"],
+      "@natulim-theme": ["theme/"]
+    }
+  },
+  "include": ["next/src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
