@@ -1,4 +1,30 @@
-# Shopilj — Natulim-style Shopify Mini Project (`main`, sin base de datos)
+<div align="center">
+
+# 🛍️ Shopilj — Natulim-style Storefront
+
+**Limpieza eficaz y responsable · Next.js + JSON · demo desplegada en Vercel**
+
+[![Abrir demo en vivo](https://img.shields.io/badge/▶_ABRIR_DEMO_EN_VIVO-storefront--dun--xi.vercel.app-2d6a4f?style=for-the-badge&logo=vercel&logoColor=white)](https://storefront-dun-xi.vercel.app/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://storefront-dun-xi.vercel.app/)
+
+[![Vista previa del storefront](storefront/public/images/hero.jpg)](https://storefront-dun-xi.vercel.app/)
+
+### 👉 [**Probar la tienda en vivo → storefront-dun-xi.vercel.app**](https://storefront-dun-xi.vercel.app/)
+
+</div>
+
+---
+
+## 🌐 Demo en vivo
+
+| | |
+|---|---|
+| 🚀 **URL** | **https://storefront-dun-xi.vercel.app/** |
+| 🏠 Home | https://storefront-dun-xi.vercel.app/ |
+| 🧴 Producto de ejemplo | https://storefront-dun-xi.vercel.app/productos/eco-tiras-40 |
+| ⚡ Hosting | Vercel (serverless, sin base de datos) |
 
 > `main` es la versión **sin base de datos**: todo el catálogo y el estado se
 > consumen desde archivos **JSON**. Diseñada para desplegar el storefront en
@@ -72,6 +98,8 @@ uvicorn app.main:app --reload
 
 ## ▲ Desplegar en Vercel
 
+> ✅ Despliegue actual: **https://storefront-dun-xi.vercel.app/**
+
 1. Importa el repo en Vercel.
 2. Configura **Root Directory** = `storefront`.
 3. Framework preset: **Next.js**.
@@ -102,3 +130,17 @@ shopilj/
 - Python 3.11 + FastAPI
 - Docker Compose (sin DB)
 - Vercel (serverless)
+
+---
+
+<div align="center">
+
+### ¿Lo probamos?
+
+## 👉 [**storefront-dun-xi.vercel.app**](https://storefront-dun-xi.vercel.app/)
+
+[![Abrir demo](https://img.shields.io/badge/▶_Abrir_la_tienda-2d6a4f?style=for-the-badge&logo=vercel&logoColor=white)](https://storefront-dun-xi.vercel.app/)
+
+Hecho con 🌱 inspirado en [natulim.com](https://natulim.com)
+
+</div>
