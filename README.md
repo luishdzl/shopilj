@@ -1,12 +1,14 @@
-# Shopilj — Natulim-style Shopify Mini Project (rama `vercel`)
+# Shopilj — Natulim-style Shopify Mini Project (`main`, sin base de datos)
 
-> Esta rama es la versión **sin base de datos**: todo el catálogo y el estado se
+> `main` es la versión **sin base de datos**: todo el catálogo y el estado se
 > consumen desde archivos **JSON**. Diseñada para desplegar el storefront en
 > **Vercel** sin PostgreSQL, Redis ni SQLite.
+>
+> La versión con base de datos vive en la rama **`bbdd`**.
 
-## 🚀 Qué cambia en esta rama
+## 🚀 Qué cambia respecto a `bbdd`
 
-| Componente | Antes (main) | Ahora (`vercel`) |
+| Componente | `bbdd` (con DB) | `main` (JSON) |
 |------------|--------------|------------------|
 | Storefront | Shopify Storefront API | JSON local (`storefront/data/*.json`) |
 | Backend | PostgreSQL + Redis + SQLAlchemy | JSON en memoria + persistencia a archivo |

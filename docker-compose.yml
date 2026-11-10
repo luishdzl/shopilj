@@ -1,4 +1,4 @@
-# Docker Compose — rama "vercel" (SIN base de datos, SIN Redis)
+# Docker Compose — rama "main" (SIN base de datos, SIN Redis)
 # Todo el estado se guarda en archivos JSON.
 #
 # Uso:
