@@ -5,7 +5,7 @@
       "title": "Colada",
       "handle": "cuidado-de-la-ropa",
       "description": "La colada más sencilla y sostenible",
-      "image": "/images/collection-laundry.webp",
+      "image": "/images/category-laundry.jpg",
       "productCount": 6
     },
     {
@@ -13,7 +13,7 @@
       "title": "Cocina y Hogar",
       "handle": "limpieza-de-la-cocina-y-hogar",
       "description": "Innovación ecológica para la limpieza del hogar",
-      "image": "/images/collection-home.webp",
+      "image": "/images/category-home.jpg",
       "productCount": 8
     },
     {
@@ -21,7 +21,7 @@
       "title": "Cabello y Cuerpo",
       "handle": "cabello-y-cuerpo",
       "description": "Cuidado personal natural y eficaz",
-      "image": "/images/collection-body.webp",
+      "image": "/images/category-body.jpg",
       "productCount": 4
     },
     {
@@ -29,7 +29,7 @@
       "title": "Bebés",
       "handle": "especial-bebes",
       "description": "Cuidado suave para los más pequeños",
-      "image": "/images/collection-baby.webp",
+      "image": "/images/category-body.jpg",
       "productCount": 3
     },
     {
@@ -37,7 +37,7 @@
       "title": "Recargas",
       "handle": "recargas",
       "description": "Recarga y ahorra sin plástico",
-      "image": "/images/collection-refills.webp",
+      "image": "/images/product-detergent.jpg",
       "productCount": 5
     },
     {
@@ -45,7 +45,7 @@
       "title": "Packs de inicio",
       "handle": "packs",
       "description": "Todo lo que necesitas para empezar",
-      "image": "/images/collection-packs.webp",
+      "image": "/images/product-pack.jpg",
       "productCount": 4
     }
   ]

@@ -7,31 +7,21 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+      },
       colors: {
+        cream: '#fbfaf6',
+        ink: '#17251c',
         natulim: {
           green: '#2d6a4f',
           'green-light': '#40916c',
-          'green-pale': '#e8f5e9',
+          'green-pale': '#e7f2ea',
         },
       },
-      keyframes: {
-        fadeIn: {
-          from: { opacity: '0' },
-          to: { opacity: '1' },
-        },
-        slideUp: {
-          from: { opacity: '0', transform: 'translateY(24px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
-        },
-        marquee: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-      },
-      animation: {
-        fadeIn: 'fadeIn 0.6s ease-out forwards',
-        slideUp: 'slideUp 0.7s ease-out forwards',
-        marquee: 'marquee 25s linear infinite',
+      borderRadius: {
+        '4xl': '2rem',
       },
     },
   },

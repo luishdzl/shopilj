@@ -1,33 +1,29 @@
-import { motion } from 'framer-motion';
-
-const badges = [
-  { icon: '♻️', title: 'Cero plástico de un solo uso', description: 'Tiras biodegradables' },
-  { icon: '🌿', title: 'Vegano & cruelty free', description: 'Ingredientes buenos' },
-  { icon: '✅', title: 'Garantía 30 días', description: 'Devolución sin preguntas' },
-  { icon: '🚚', title: 'Envío gratis', description: 'A partir de 25€' },
-  { icon: '💰', title: 'Ahorra hasta 20%', description: 'Suscríbete' },
-  { icon: '🧪', title: 'EcoCert', description: 'Certificación ecológica' },
+const items = [
+  { title: 'Más eficaces', subtitle: 'que los de siempre', icon: 'M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5' },
+  { title: 'Sin tóxicos', subtitle: 'para ti y los tuyos', icon: 'M12 3 4 7v5c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z' },
+  { title: 'Cero plástico', subtitle: 'de un solo uso', icon: 'M6 7h12l-1.5 13h-9L6 7Zm3 0V5a3 3 0 0 1 6 0v2' },
+  { title: 'Vegano', subtitle: 'y cruelty free', icon: 'M12 21c5-3 8-7 8-11a4 4 0 0 0-8-1 4 4 0 0 0-8 1c0 4 3 8 8 11Z' },
+  { title: 'Garantía 30 días', subtitle: 'devolución sencilla', icon: 'M4 12a8 8 0 1 0 2.5-5.8M4 4v4h4' },
+  { title: 'Envío gratis', subtitle: 'desde 25 €', icon: 'M3 7h11v10H3V7Zm11 4h4l3 3v3h-7v-6ZM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z' },
 ];
 
 export function TrustBadges() {
-  const marqueeItems = [...badges, ...badges];
-
   return (
-    <section className="py-12 bg-[var(--natulim-gray-50)] border-y border-[var(--natulim-green-pale)]">
-      <div className="container">
-        <div className="marquee overflow-hidden">
-          <div className="flex gap-12 pr-12">
-            {marqueeItems.map((badge, i) => (
-              <div key={i} className="flex items-center gap-3 whitespace-nowrap">
-                <span className="text-3xl">{badge.icon}</span>
-                <div>
-                  <p className="font-semibold text-sm">{badge.title}</p>
-                  <p className="text-xs text-gray-500">{badge.description}</p>
-                </div>
-              </div>
-            ))}
+    <section aria-label="Ventajas" className="border-y border-black/[0.06] bg-white/60">
+      <div className="container grid grid-cols-2 gap-x-4 gap-y-6 py-8 sm:grid-cols-3 lg:grid-cols-6">
+        {items.map((item) => (
+          <div key={item.title} className="flex items-start gap-3">
+            <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--green-pale)] text-[var(--green)]">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d={item.icon} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div>
+              <p className="text-sm font-semibold leading-tight">{item.title}</p>
+              <p className="mt-0.5 text-xs text-[var(--ink-soft)]">{item.subtitle}</p>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );

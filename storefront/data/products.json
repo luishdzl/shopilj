@@ -12,8 +12,8 @@
       "rating": 4.8,
       "reviews": 11960,
       "images": [
-        "/images/product-detergent-1.webp",
-        "/images/product-detergent-2.webp"
+        "/images/product-detergent.jpg",
+        "/images/product-detergent.jpg"
       ],
       "variants": [
         { "id": "var-001", "title": "Sin Fragancia", "price": 9.95, "available": true },
@@ -33,7 +33,7 @@
       "badge": "Best Seller",
       "rating": 4.9,
       "reviews": 2337,
-      "images": ["/images/product-dishwasher-1.webp"],
+      "images": ["/images/product-dishwasher.jpg"],
       "variants": [
         { "id": "var-004", "title": "60 Lavados", "price": 17.95, "available": true }
       ],
@@ -50,7 +50,7 @@
       "badge": "Best Seller",
       "rating": 4.8,
       "reviews": 1855,
-      "images": ["/images/product-pearls-1.webp"],
+      "images": ["/images/product-pearls.jpg"],
       "variants": [
         { "id": "var-005", "title": "Floral", "price": 7.95, "available": true },
         { "id": "var-006", "title": "Lavanda", "price": 7.95, "available": true },
@@ -69,7 +69,7 @@
       "badge": "Novedad",
       "rating": 4.8,
       "reviews": 1080,
-      "images": ["/images/product-floor-1.webp"],
+      "images": ["/images/product-floor.jpg"],
       "variants": [
         { "id": "var-008", "title": "Sin Fragancia", "price": 7.2, "available": true },
         { "id": "var-009", "title": "Jazmín", "price": 7.2, "available": true }
@@ -87,7 +87,7 @@
       "badge": "-40%",
       "rating": 4.9,
       "reviews": 238,
-      "images": ["/images/product-pack-1.webp"],
+      "images": ["/images/product-pack.jpg"],
       "variants": [
         { "id": "var-010", "title": "Pack completo", "price": 29.99, "available": true }
       ],
@@ -104,7 +104,7 @@
       "badge": null,
       "rating": 4.8,
       "reviews": 662,
-      "images": ["/images/product-shampoo-1.webp"],
+      "images": ["/images/product-shampoo.jpg"],
       "variants": [
         { "id": "var-011", "title": "Cabello normal", "price": 22.0, "available": true },
         { "id": "var-012", "title": "Cabello graso", "price": 22.0, "available": true },
