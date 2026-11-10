@@ -1,0 +1,40 @@
+{
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "¿Cuánto cuesta el envío?",
+      "answer": "Envío en buzón: 3,95€ (4 días laborables). Envío gratis a partir de 25€ (2-3 días laborables). Si te suscribes, el envío es gratis en todos los pedidos recurrentes."
+    },
+    {
+      "id": "faq-2",
+      "question": "¿Cómo funcionan las suscripciones?",
+      "answer": "Eliges la frecuencia de entrega que mejor se ajuste a tus necesidades. Puedes cambiar, adelantar o retrasar pedidos sin período de permanencia. Los pedidos se cargan automáticamente a tu método de pago."
+    },
+    {
+      "id": "faq-3",
+      "question": "¿Hay permanencia en la suscripción? ¿Es difícil de cancelar?",
+      "answer": "No hay ningún tipo de permanencia. Para cancelar basta con enviarnos un email o hacerlo tú mismo desde tu perfil."
+    },
+    {
+      "id": "faq-4",
+      "question": "¿Puedo cambiar la frecuencia una vez hecha la suscripción?",
+      "answer": "Sí. Una vez tengas la suscripción, puedes subir y bajar la frecuencia según lo necesites. Escríbenos y te ayudamos."
+    },
+    {
+      "id": "faq-5",
+      "question": "¿Qué formas de pago aceptan?",
+      "answer": "Tarjetas de débito y crédito, PayPal, Google Pay, Apple Pay (compra única y suscripción) y Bizum (solo compra única)."
+    },
+    {
+      "id": "faq-6",
+      "question": "¿Los productos son ecológicos?",
+      "answer": "Sí. Todos nuestros productos son ecológicos, veganos, cruelty free, sin plásticos de un solo uso y con ingredientes naturales."
+    }
+  ],
+  "subscriptions": [
+    { "id": "sub-1", "title": "Cada 1 mes", "discount": 0.15, "description": "Recibe tu producto cada mes" },
+    { "id": "sub-2", "title": "Cada 2 meses", "discount": 0.15, "description": "Recibe tu producto cada 2 meses" },
+    { "id": "sub-3", "title": "Cada 3 meses", "discount": 0.15, "description": "Recibe tu producto cada 3 meses" },
+    { "id": "sub-4", "title": "Compra única", "discount": 0, "description": "Sin suscripción" }
+  ]
+}

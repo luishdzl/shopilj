@@ -1,0 +1,116 @@
+{
+  "products": [
+    {
+      "id": "prod-001",
+      "title": "Eco-Tiras de Detergente 40 Lavados",
+      "handle": "eco-tiras-40",
+      "description": "Tiras biodegradables que se disuelven en la lavadora. Apto para ropa blanca y de color, con efecto suavizante.",
+      "price": 9.95,
+      "compareAtPrice": 12.5,
+      "currency": "EUR",
+      "badge": "Best Seller",
+      "rating": 4.8,
+      "reviews": 11960,
+      "images": [
+        "/images/product-detergent-1.webp",
+        "/images/product-detergent-2.webp"
+      ],
+      "variants": [
+        { "id": "var-001", "title": "Sin Fragancia", "price": 9.95, "available": true },
+        { "id": "var-002", "title": "Floral", "price": 9.95, "available": true },
+        { "id": "var-003", "title": "Lavanda", "price": 9.95, "available": true }
+      ],
+      "features": ["Apto ropa blanca y color", "Efecto suavizante", "Cero plástico"]
+    },
+    {
+      "id": "prod-002",
+      "title": "Eco Pastillas Lavavajillas 6 en 1 — 60 Lavados",
+      "handle": "lavavajillas",
+      "description": "60 pastillas con 6 funciones en 1. Limpieza anti grasa y protección anti cal.",
+      "price": 17.95,
+      "compareAtPrice": 20.17,
+      "currency": "EUR",
+      "badge": "Best Seller",
+      "rating": 4.9,
+      "reviews": 2337,
+      "images": ["/images/product-dishwasher-1.webp"],
+      "variants": [
+        { "id": "var-004", "title": "60 Lavados", "price": 17.95, "available": true }
+      ],
+      "features": ["6 funciones en 1", "Ecolabel", "Vegano y cruelty free"]
+    },
+    {
+      "id": "prod-003",
+      "title": "Perlas Perfumadas",
+      "handle": "perlas-perfumadas",
+      "description": "Fragancia intensa y duradera sin químicos nocivos para la colada.",
+      "price": 7.95,
+      "compareAtPrice": 9.58,
+      "currency": "EUR",
+      "badge": "Best Seller",
+      "rating": 4.8,
+      "reviews": 1855,
+      "images": ["/images/product-pearls-1.webp"],
+      "variants": [
+        { "id": "var-005", "title": "Floral", "price": 7.95, "available": true },
+        { "id": "var-006", "title": "Lavanda", "price": 7.95, "available": true },
+        { "id": "var-007", "title": "Bosque Aurora", "price": 7.95, "available": false }
+      ],
+      "features": ["Fragancia duradera", "Sin químicos nocivos"]
+    },
+    {
+      "id": "prod-004",
+      "title": "Friegasuelos — 30 Eco-Tiras",
+      "handle": "friega-suelos",
+      "description": "Apto para parquet, mármol y gres. Sin lejía, seguro con mascotas.",
+      "price": 7.2,
+      "compareAtPrice": 9.0,
+      "currency": "EUR",
+      "badge": "Novedad",
+      "rating": 4.8,
+      "reviews": 1080,
+      "images": ["/images/product-floor-1.webp"],
+      "variants": [
+        { "id": "var-008", "title": "Sin Fragancia", "price": 7.2, "available": true },
+        { "id": "var-009", "title": "Jazmín", "price": 7.2, "available": true }
+      ],
+      "features": ["Secado rápido", "Seguro con mascotas", "Brillo sin marcas"]
+    },
+    {
+      "id": "prod-005",
+      "title": "Pack Esenciales del Hogar",
+      "handle": "pack-esenciales",
+      "description": "4 limpiadores Ecocert con botella reciclable infinita.",
+      "price": 29.99,
+      "compareAtPrice": 50.04,
+      "currency": "EUR",
+      "badge": "-40%",
+      "rating": 4.9,
+      "reviews": 238,
+      "images": ["/images/product-pack-1.webp"],
+      "variants": [
+        { "id": "var-010", "title": "Pack completo", "price": 29.99, "available": true }
+      ],
+      "features": ["4 limpiadores Ecocert", "Sin disruptores endocrinos"]
+    },
+    {
+      "id": "prod-006",
+      "title": "Champú Natulim Kēr — Sunrise",
+      "handle": "champu-sunrise",
+      "description": "Champú para cabello normal con ingredientes naturales y dispensador reutilizable.",
+      "price": 22.0,
+      "compareAtPrice": 24.0,
+      "currency": "EUR",
+      "badge": null,
+      "rating": 4.8,
+      "reviews": 662,
+      "images": ["/images/product-shampoo-1.webp"],
+      "variants": [
+        { "id": "var-011", "title": "Cabello normal", "price": 22.0, "available": true },
+        { "id": "var-012", "title": "Cabello graso", "price": 22.0, "available": true },
+        { "id": "var-013", "title": "Cabello dañado", "price": 22.0, "available": true }
+      ],
+      "features": ["Revitaliza desde la raíz", "Dispensador reutilizable"]
+    }
+  ]
+}

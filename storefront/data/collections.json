@@ -1,0 +1,52 @@
+{
+  "collections": [
+    {
+      "id": "col-001",
+      "title": "Colada",
+      "handle": "cuidado-de-la-ropa",
+      "description": "La colada más sencilla y sostenible",
+      "image": "/images/collection-laundry.webp",
+      "productCount": 6
+    },
+    {
+      "id": "col-002",
+      "title": "Cocina y Hogar",
+      "handle": "limpieza-de-la-cocina-y-hogar",
+      "description": "Innovación ecológica para la limpieza del hogar",
+      "image": "/images/collection-home.webp",
+      "productCount": 8
+    },
+    {
+      "id": "col-003",
+      "title": "Cabello y Cuerpo",
+      "handle": "cabello-y-cuerpo",
+      "description": "Cuidado personal natural y eficaz",
+      "image": "/images/collection-body.webp",
+      "productCount": 4
+    },
+    {
+      "id": "col-004",
+      "title": "Bebés",
+      "handle": "especial-bebes",
+      "description": "Cuidado suave para los más pequeños",
+      "image": "/images/collection-baby.webp",
+      "productCount": 3
+    },
+    {
+      "id": "col-005",
+      "title": "Recargas",
+      "handle": "recargas",
+      "description": "Recarga y ahorra sin plástico",
+      "image": "/images/collection-refills.webp",
+      "productCount": 5
+    },
+    {
+      "id": "col-006",
+      "title": "Packs de inicio",
+      "handle": "packs",
+      "description": "Todo lo que necesitas para empezar",
+      "image": "/images/collection-packs.webp",
+      "productCount": 4
+    }
+  ]
+}

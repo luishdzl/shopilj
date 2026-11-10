@@ -1,59 +1,63 @@
 """
-FastAPI Backend — Natulim Style Shopify Integrations
+FastAPI Backend — Natulim Style Integrations
+RAMA "vercel": sin base de datos ni Redis.
+Todo se consume y persiste desde/hacia archivos JSON locales.
+
+- Los datos semilla viven en `backend-integrations/data/*.json`.
+- El estado en tiempo de ejecución se guarda en memoria y, si el
+  filesystem es escribible, se refleja en JSON (en Vercel usar /tmp).
 """
 
+import json
 import os
 import hashlib
 import hmac
-import json
-from typing import Optional
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Optional
 
-from fastapi import FastAPI, Request, HTTPException, Header, Depends
+from fastapi import FastAPI, Request, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-import redis.asyncio as redis
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
 
-# === Configuración ===
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
-DB_URL = os.getenv("DATABASE_URL", "sqlite:///./natulim_integrations.db")
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
 
-redis_client = redis.from_url(REDIS_URL, decode_responses=True)
-engine = create_engine(DB_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+# En Vercel el repo es read-only: escribimos en /tmp
+WRITE_DIR = Path(os.getenv("JSON_STORE_DIR", tempfile.gettempdir()))
+WRITE_DIR.mkdir(parents=True, exist_ok=True)
 
-# === Models ===
-class IntegrationLog(BaseModel):
-    """Log de integración con campos clave"""
-    order_id: Optional[str] = None
-    external_id: Optional[str] = None
-    status: str = "pending"
-    error: Optional[str] = None
-    raw_data: Optional[dict] = None
-    processed_at: Optional[str] = None
+ORDERS_FILE = WRITE_DIR / "orders.json"
+IDEMPOTENCY_FILE = WRITE_DIR / "idempotency.json"
+SEED_PRODUCTS_FILE = DATA_DIR / "products.json"
 
-# === Base DB ===
-class Integration(Base):
-    __tablename__ = "integrations"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    order_id = Column(String, unique=True, index=True)
-    external_system = Column(String, default="shopify")
-    status = Column(String, default="pending")
-    error = Column(String, nullable=True)
-    raw_data = Column(Text, nullable=True)
-    processed_at = Column(String, nullable=True)
 
-Base.metadata.create_all(bind=engine)
+def _read_json(path: Path, default: Any) -> Any:
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return default
 
-# === App ===
+
+def _write_json(path: Path, data: Any) -> None:
+    try:
+        with path.open("w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except OSError:
+        # Filesystem de solo lectura (p. ej. Vercel): seguimos en memoria
+        pass
+
+
+# Estado en memoria (fuente de verdad en runtime)
+_orders: list[dict] = _read_json(ORDERS_FILE, [])
+_idempotency: dict[str, dict] = _read_json(IDEMPOTENCY_FILE, {})
+
 app = FastAPI(
-    title="Natulim Style Integrations",
-    description="Backend FastAPI para integraciones con Shopify, Odoo y operadores logísticos",
-    version="0.1.0"
+    title="Natulim Style Integrations (JSON edition)",
+    description="Backend sin base de datos: todo desde JSON. Compatible con Vercel.",
+    version="0.2.0",
 )
 
 app.add_middleware(
@@ -64,162 +68,165 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === Dependencias ===
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
-# === Health Check ===
+# ============ Health ============
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "redis": redis_client.ping()}
+    return {
+        "status": "ok",
+        "storage": "json",
+        "database": None,
+        "runtime_dir": str(WRITE_DIR),
+    }
 
-# === Webhooks ===
+
+# ============ Catálogo (lectura desde JSON) ============
+@app.get("/api/products")
+async def list_products():
+    data = _read_json(SEED_PRODUCTS_FILE, {"products": []})
+    return data.get("products", [])
+
+
+@app.get("/api/products/{handle}")
+async def get_product(handle: str):
+    data = _read_json(SEED_PRODUCTS_FILE, {"products": []})
+    for product in data.get("products", []):
+        if product.get("handle") == handle or product.get("id") == handle:
+            return product
+    raise HTTPException(status_code=404, detail="Producto no encontrado")
+
+
+# ============ Webhooks ============
 async def verify_shopify_webhook(request: Request) -> bool:
-    """Verificar firma HMAC de webhook de Shopify"""
-    body = await request.body()
-    signature = request.headers.get("X-Shopify-Hmac-Sha256", "")
-    timestamp = request.headers.get("X-Shopify-Webhook-Timeout", "")
-    
-    if not signature:
-        return False
-    
+    """Verifica la firma HMAC de Shopify (si hay secreto configurado)."""
     secret = os.getenv("SHOPIFY_WEBHOOK_SECRET", "")
     if not secret:
-        # Firmar con base64 decodificado
-        import base64
-        secret = base64.b64decode(secret.encode())
-    
-    mac = hmac.new(secret, body, hashlib.sha256).hexdigest()
+        # Sin secreto configurado (modo demo) no bloqueamos
+        return True
+
+    body = await request.body()
+    signature = request.headers.get("X-Shopify-Hmac-Sha256", "")
+    if not signature:
+        return False
+
+    mac = hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
     expected = "sha256=" + mac
-    
-    # Verificamos con timing-safe compare
     return hmac.compare_digest(expected, signature)
 
+
+def _is_duplicate(key: Optional[str]) -> Optional[dict]:
+    if not key:
+        return None
+    return _idempotency.get(key)
+
+
 @app.post("/api/webhooks/orders")
-async def shopify_orders_webhook(request: Request, db: Session = Depends(get_db)):
-    """Webhook de nuevos pedidos de Shopify"""
+async def shopify_orders_webhook(
+    request: Request,
+    x_idempotency_key: Optional[str] = Header(default=None),
+):
     if not await verify_shopify_webhook(request):
         raise HTTPException(status_code=401, detail="Firma de webhook inválida")
-    
+
     body = await request.json()
-    order_data = body.get("order", {})
+    order_data = body.get("order", body)
     order_id = order_data.get("id")
-    
+
     if not order_id:
-        raise HTTPException(status_code=400, detail "No hay order_id")
-    
-    # Verificar idempotency key
-    idempotency_key = request.headers.get("X-Idempotency-Key", "")
-    if idempotency_key:
-        cached = redis_client.get(f"idem:{idempotency_key}")
-        if cached:
-            return {"status": "idempotent", "data": json.loads(cached)}
-    
-    # Guardar log
-    db_integration = Integration(
-        order_id=order_id,
-        external_system="shopify",
-        status="processing",
-        raw_data=json.dumps(order_data)
-    )
-    db.add(db_integration)
-    db.commit()
-    
-    # Encolar tarea
-    await redis_client.lpush("queue:orders", json.dumps(order_data))
-    
-    # Guardar idempotency key
-    if idempotency_key:
-        redis_client.setex(f"idem:{idempotency_key}", 86400, json.dumps({
-            "status": "processing",
-            "order_id": order_id
-        }))
-    
-    return {"status": "received", "order_id": order_id, "queued": True}
+        raise HTTPException(status_code=400, detail="No hay order_id")
+
+    duplicate = _is_duplicate(x_idempotency_key)
+    if duplicate:
+        return {"status": "idempotent", "data": duplicate}
+
+    record = {
+        "order_id": str(order_id),
+        "external_system": "shopify",
+        "status": "queued",
+        "raw_data": order_data,
+        "processed_at": datetime.now(timezone.utc).isoformat(),
+    }
+    _orders.append(record)
+    _write_json(ORDERS_FILE, _orders)
+
+    if x_idempotency_key:
+        _idempotency[x_idempotency_key] = record
+        _write_json(IDEMPOTENCY_FILE, _idempotency)
+
+    return {"status": "received", "order_id": str(order_id), "queued": True}
+
 
 @app.post("/api/webhooks/fulfillments")
 async def shopify_fulfillments_webhook(request: Request):
-    """Webhook de fulfillments de Shopify"""
     if not await verify_shopify_webhook(request):
         raise HTTPException(status_code=401, detail="Firma de webhook inválida")
-    
-    body = await request.json()
-    fulfillment_data = body.get("fulfillment", {})
-    fulfillment_id = fulfillment_data.get("id")
-    
-    return {"status": "received", "fulfillment_id": fulfillment_id}
 
-# === Endpoints CRUD ===
+    body = await request.json()
+    fulfillment_data = body.get("fulfillment", body)
+    return {
+        "status": "received",
+        "fulfillment_id": fulfillment_data.get("id"),
+        "processed_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+# ============ Órdenes ============
 @app.get("/api/orders")
-async def list_orders(
-    status: Optional[str] = None,
-    db: Session = Depends(get_db)
-):
-    query = db.query(Integration).filter(Integration.external_system == "shopify")
+async def list_orders(status: Optional[str] = None):
     if status:
-        query = query.filter(Integration.status == status)
-    return query.all()
+        return [o for o in _orders if o.get("status") == status]
+    return _orders
+
 
 @app.post("/api/orders")
-async def create_order(
-    order: dict,
-    db: Session = Depends(get_db)
-):
-    # Simular integración
-    db_integration = Integration(
-        order_id=str(order.get("id", "new")),
-        external_system="shopify",
-        status="created",
-        raw_data=json.dumps(order)
-    )
-    db.add(db_integration)
-    db.commit()
-    return db_integration
+async def create_order(order: dict):
+    record = {
+        "order_id": str(order.get("id", f"local-{len(_orders) + 1}")),
+        "external_system": "local",
+        "status": "created",
+        "raw_data": order,
+        "processed_at": datetime.now(timezone.utc).isoformat(),
+    }
+    _orders.append(record)
+    _write_json(ORDERS_FILE, _orders)
+    return record
 
-# === Suscripciones ===
-@app.get("/api/subscriptions")
-async def list_subscriptions():
-    return []
 
-@app.post("/api/subscriptions")
-async def create_subscription(subscription: dict):
-    return {"status": "created", "data": subscription}
-
-# === Idempotency ===
+# ============ Idempotencia ============
 @app.post("/api/idempotency")
 async def register_idempotency(
     key: str = Header(...),
     method: str = Header(...),
     path: str = Header(...),
-    body: str = Header(...)
+    body: str = Header(...),
 ):
-    await redis_client.setex(f"idem:{key}", 86400, body)
+    _idempotency[key] = {
+        "method": method,
+        "path": path,
+        "body": body,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    _write_json(IDEMPOTENCY_FILE, _idempotency)
     return {"status": "registered", "key": key}
 
-# === Workers (simulación con Redis) ===
-@app.on_event("startup")
-async def startup():
-    # Simular colas de trabajadores
-    async def consume_orders():
-        while True:
-            item = await redis_client.lpop("queue:orders")
-            if item:
-                data = json.loads(item)
-                # Lógica: sincronizar con Odoo, actualizar inventario
-                pass
-    
-    async def reconcile_inventory():
-        """Reconciliar diferencias entre Shopify y Odoo"""
-        while True:
-            # Simular búsqueda de diferencias
-            await redis_client.sleep(300)  # Cada 5 minutos
-            # Lógica: comparar stock Shopify vs Odoo, detectar discrepancies
-    
-    # Iniciar tareas en background
-    import asyncio
-    asyncio.create_task(consume_orders())
-    asyncio.create_task(reconcile_inventory())
+
+@app.get("/api/idempotency/{key}")
+async def get_idempotency(key: str):
+    value = _idempotency.get(key)
+    if not value:
+        raise HTTPException(status_code=404, detail="Idempotency key no encontrada")
+    return value
+
+
+# ============ Reconciliación (demo desde JSON) ============
+@app.get("/api/reconcile")
+async def reconcile():
+    """Compara el catálogo JSON con las órdenes registradas (demo)."""
+    products = _read_json(SEED_PRODUCTS_FILE, {"products": []}).get("products", [])
+    return {
+        "products_checked": len(products),
+        "orders_checked": len(_orders),
+        "discrepancies": [],
+        "source": "json",
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+    }
